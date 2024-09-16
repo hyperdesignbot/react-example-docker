@@ -4,4 +4,4 @@ COPY package.json /react-docker-example/
 COPY public /react-docker-example/public
 COPY src /react-docker-example/src
 RUN npm install
-CMD [ "npm", "start" ]
+RUN npm run build
