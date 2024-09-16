@@ -1,16 +1,11 @@
-FROM node:18-alpine
-WORKDIR /react-docker-example/
-COPY package.json /react-docker-example/
+FROM node:14 AS build
+WORKDIR /app
+COPY package.json .
+COPY package-lock.json .
 RUN npm install
+COPY . .
 RUN npm run build
-# Use Nginx as the production server
 FROM nginx:alpine
-
-# Copy the built React app to Nginx's web server directory
-COPY --from=build /react-docker-example/build /usr/share/nginx/html
-
-# Expose port 80 for the Nginx server
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
-
-# Start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
